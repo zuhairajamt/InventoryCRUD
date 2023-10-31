@@ -1,25 +1,32 @@
+const userSession = require("../helpers/session")
+const adminSession = require("../helpers/sessionAdmin")
+const managerSession = require("../helpers/sessionManager")
+
 module.exports = (app) => {
   const inventory = require("../controllers/inventory.controller.js");
 
   var router = require("express").Router();
 
   // Create a new Tutorial
-  router.post("/", inventory.create);
+  router.post("/", userSession, inventory.create);
 
   // Retrieve all inventory
-  router.get("/", inventory.findAll);
+  router.get("/", userSession, inventory.findAll);
 
   // Retrieve a single Tutorial with id
-  router.get("/:id", inventory.findOne);
+  router.get("/:id", userSession, inventory.findOne);
 
   // Update a Tutorial with id
-  router.put("/:id", inventory.update);
+  router.put("/:id", userSession, inventory.update);
 
   // Delete a Tutorial with id
-  router.delete("/:id", inventory.delete);
+  router.delete("/:id", userSession, inventory.delete);
 
-  // Create a new Tutorial
-  router.delete("/", inventory.deleteAll);
+  // Delete all Tutorial
+  router.delete("/", userSession, inventory.deleteAll);
+
+  // Delete all Tutorial by Admin
+  router.delete("/deletebyadmin", adminSession, inventory.deleteAll);
 
   app.use('/api/inventory', router);
 };

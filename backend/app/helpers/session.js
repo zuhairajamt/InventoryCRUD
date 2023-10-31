@@ -19,7 +19,8 @@ const userSession = async (req, res, next) => {
         req.user = {
           id: user.id,
           username: user.username,
-          role: user.role
+          role: user.role,
+          activation: user.activation
         };
         next();
       } else {

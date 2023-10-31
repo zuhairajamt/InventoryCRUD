@@ -26,7 +26,7 @@ exports.create = (req, res) => {
       return;
     }
 
-    user.password = hash; 
+    user.password = hash;
 
     User.create(user)
       .then((data) => {
@@ -144,6 +144,40 @@ exports.deleteAll = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Some error occurred while removing all Users.",
+      });
+    });
+};
+
+exports.verUser = (req, res) => {
+  const id = req.params.id;
+
+  User.findByPk(id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          message: `Cannot toggle activation for User with id=${id}. User not found!`,
+        });
+      }
+
+      const newActivationStatus = !user.activation;
+
+      User.update({ activation: newActivationStatus }, { where: { id: id } })
+        .then(() => {
+          res.send({
+            message: `User activation status has been toggled to ${
+              newActivationStatus ? "active" : "inactive"
+            }.`,
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: "Could not toggle User activation with id=" + id,
+          });
+        });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not find User with id=" + id,
       });
     });
 };

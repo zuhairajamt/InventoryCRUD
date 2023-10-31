@@ -35,5 +35,7 @@ module.exports = (app) => {
 
   router.delete("/", adminSession, user.deleteAll);
 
+  router.put("/activation/:id", adminSession, user.verUser);
+
   app.use('/api/user', router);
 };

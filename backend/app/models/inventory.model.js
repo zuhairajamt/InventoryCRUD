@@ -16,7 +16,20 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.FLOAT,
       allowNull: false,
     },
+    userID: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
   });
+
+  Inventory.associate = (models) => {
+    Inventory.belongsTo(models.users, {
+      foreignKey: {
+        name: "userID",
+        allowNull: false,
+      },
+    });
+  };
 
   return Inventory;
 };
